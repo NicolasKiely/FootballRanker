@@ -1,0 +1,32 @@
+ari, Arizona, Cardinals
+atl, Atlanta, Falcons
+bal, Baltimore, Ravens
+buf, Buffalo, Bills
+car, Carolina, Panthers
+chi, Chicago, Bears
+cin, Cincinnati, Bengals
+cle, Cleveland, Browns
+dal, Dallas, Cowboys
+den, Denver, Broncos
+det, Detroit, Lions
+gb, Green Bay, Packers
+hou, Houston, Texans
+ind, Indianapolis, Colts
+jax, Jacksonville, Jaguars
+kc, Kansas City, Chiefs
+lac, Los Angeles, Chargers
+la, Los Angeles, Rams
+mia, Miami, Dolphins
+min, Minnesota, Vikings
+ne, New England, Patriots
+no, New Orleans, Saints
+nyg, New York, Giants
+nyj, New York, Jets
+oak, Oakland, Raiders
+phi, Philadelphia, Eagles
+put, Pittsburgh, Steelers
+sf, San Francisco, 49ers
+sea, Seattle, Seahawks
+tb, Tampa Bay, Buccaneers
+ten, Tennessee, Titans
+was, Washington, Redskins
