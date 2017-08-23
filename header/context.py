@@ -9,7 +9,7 @@ class Context(object):
         # Load teams from file
         with open('teams.txt', 'r') as team_file:
             team_list = [team.Team.load_record(x) for x in team_file]
-            self.teams = {t.name: t for t in team_list}
+            self.teams = {t.mascot: t for t in team_list}
 
         # Load seasons
         self.seasons = {s: season.Season(self, s) for s in seasons}
