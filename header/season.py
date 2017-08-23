@@ -19,5 +19,24 @@ class Season(object):
         self.context = context
         self.weeks = [matches.Week(self, x) for x in common.week_range()]
 
+
+    def calculate_rankings(self, initial_score):
+        ''' Calculate rankings for all weeks '''
+        scores = initial_score
+
+        for week in self.weeks:
+            # Calculate this week's rankings
+            week.ranking.calculate(scores)
+
+            # Update scores for use in next week
+            scores = week.ranking.score
+
+
+    def save_rankings(self):
+        ''' Saves rankings to file '''
+        for week in self.weeks:
+            week.ranking.save()
+    
+
     def __str__(self):
         return 'Season '+self.name+ ':\n\t' + '\n\t'.join(map(str, self.weeks))
