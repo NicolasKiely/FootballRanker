@@ -1,6 +1,7 @@
 ''' Downloads matches from NFL site '''
 
 import sys
+import os
 import urllib2
 import bs4
 
@@ -64,11 +65,12 @@ def process_matches(season, week):
     output = create_match_doc(season, week)
 
     print 'Processing season %s, #%s' % (season, week)
+    if not os.path.exists('seasons/'+season):
+        os.makedirs('seasons/'+season)
     match_file = open(OUTPUT_FILE_TEMPLATE % (season, week), 'w')
     match_file.write(output)
     match_file.close()
     print output
-
 
 if len(sys.argv) == 3:
     season = sys.argv[1]
