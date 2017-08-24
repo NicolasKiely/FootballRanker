@@ -34,6 +34,14 @@ class Season(object):
             scores = week.ranking.score
 
 
+    def load_rankings(self):
+        ''' Loads rankings from file '''
+        for week in self.weeks:
+            week.ranking.load()
+
+        self.week0.ranking.load()
+
+
     def save_rankings(self):
         ''' Saves rankings to file '''
         for week in self.weeks:

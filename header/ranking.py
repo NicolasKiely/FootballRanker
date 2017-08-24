@@ -43,3 +43,11 @@ class Ranking(object):
         with open(file_name, 'w') as rank_file:
             for team, score in self.score.iteritems():
                 rank_file.write('%s,%s\n' % (team, score))
+
+    def load(self):
+        ''' Loads ranking from file '''
+        file_name = common.RANK_FILE %(self.week.season.name, self.week.num)
+        with open(file_name, 'r') as rank_file:
+            for record in rank_file:
+                team, score = common.parse(record)
+                self.score[team] = score
