@@ -10,9 +10,13 @@ class Ranking(object):
         self.week = week
         self.score = {tname: None for tname in context.teams.keys()}
 
+    def set_scores(self, scores):
+        ''' Sets scores for ranking '''
+        self.score = {k:v for k,v in scores.iteritems()}
+
     def calculate(self, prev_scores):
         ''' Calculate scores for this week using data from past week '''
-        self.score = {k:v for k,v in prev_scores.iteritems()}
+        self.set_scores(prev_scores)
         for match in self.week.matches:
             if match.played:
                 try:

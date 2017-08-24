@@ -34,17 +34,19 @@ class Match(object):
 
 class Week(object):
     ''' Represents a week in a season '''
-    def __init__(self, season, week_num):
+    def __init__(self, season, week_num, load=True):
         self.season = season
         self.num = week_num
+
+        # Create uninitialize ranking
+        self.ranking = ranking.Ranking(self.season.context, self)
+        if not load:
+            return
 
         # Load matches from file
         file_name = common.MATCH_FILE % (season.name, str(week_num))
         with open(file_name, 'r') as match_file:
             self.matches = [Match(self, common.parse(m)) for m in match_file]
-
-        # Create uninitialize ranking
-        self.ranking = ranking.Ranking(self.season.context, self)
 
     def __str__(self):
         return 'Week: '+ str(self.num) + ''.join(['\n\t\t'+str(m) for m in self.matches])
