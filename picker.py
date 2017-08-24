@@ -20,9 +20,14 @@ available_teams = set(ctx.teams.keys())
 owned_teams = set()
 team_points = {t:0 for t in ctx.teams.keys()}
 
+# Projected stats
+proj_owned_teams = set()
+proj_team_points = {t:0 for t in ctx.teams.keys()}
+
 for week in season.weeks:
     # For each week
     print 'Week:', week.num
+    all_matches_played = True
 
     # Load last standing ranking
     if week.num == 1:
@@ -38,15 +43,22 @@ for week in season.weeks:
     for match in week.matches:
         # For each match
 
-        if match.played:
-            team_points[match.winner] += 1
-
         # Get the lower and higher ranked teams
         lteam, hteam = match.teams
         lscore, hscore = standing.score[lteam], standing.score[hteam]
         if lscore > hscore:
             lteam, hteam = hteam, lteam
             lscore, hscore = hscore, lscore
+
+        # Update team points
+        if match.played:
+            team_points[match.winner] += 1
+            proj_team_points[match.winner] += 1
+        else:
+            # Guess that better ranked team wins
+            proj_team_points[hteam] += 1
+            all_matches_played = False
+            
 
         # Update best team to pick
         if lteam in available_teams:
@@ -63,18 +75,31 @@ for week in season.weeks:
             print ' [Pick Aqcuired]'
             available_teams.remove(best_team)
             owned_teams.add(best_team)
+            proj_owned_teams.add(best_team)
 
         else:
             print ' [Pick Discarded]'
     else:
+        # This is a projection
+        available_teams.remove(best_team)
+        proj_owned_teams.add(best_team)
         print
 
     # List team score status
-    print '    Own: ',
+    print '  Owned Teams:\n    ',
     week_score = 0
     for team in owned_teams:
         week_score += team_points[team]
         print '%s [%s],' % (team, team_points[team]),
-
     print '\n  Week Score: ', week_score
     print
+    
+    if not all_matches_played:
+        print '  Projected Owned Teams:\n    ',
+        proj_score = 0
+        for team in proj_owned_teams:
+            proj_score += proj_team_points[team]
+            print '%s [%s],' % (team, proj_team_points[team]),
+
+        print '\n  Projected Week Score: ', proj_score
+        print
