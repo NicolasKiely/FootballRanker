@@ -19,22 +19,14 @@ class Ranking(object):
         self.set_scores(prev_scores)
         for match in self.week.matches:
             if match.played:
-                try:
-                    # Fetch old scores
-                    winner_score = prev_scores[match.winner]
-                    loser_score = prev_scores[match.loser]
+                # Fetch old scores
+                winner_score = float(prev_scores[match.winner])
+                loser_score = float(prev_scores[match.loser])
 
-                    # Update this ranking's scores
-                    score_delta = loser_score * 0.1
-                    self.score[match.winner] = winner_score + score_delta
-                    self.score[match.loser] = loser_score - score_delta
-
-                except Exception as ex:
-                    print ex
-                    raise Exception(
-                        'Error in calculating score for week %s: "%s" vs "%s"' %
-                        (self.week.num, match.winner, match.loser)
-                    )
+                # Update this ranking's scores
+                score_delta = loser_score * 0.1
+                self.score[match.winner] = winner_score + score_delta
+                self.score[match.loser] = loser_score - score_delta
 
 
     def save(self):

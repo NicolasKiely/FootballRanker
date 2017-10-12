@@ -14,6 +14,8 @@ Week: {{ week.num }}
     {%- if match.winner %}
     Actual winner: {{ match.winner }}{% endif %}
 {% endfor %}
+{% if week.played %}Accuracy: {{ week.correct }} / {{ week.played }}{% endif %}
+
 {% endfor %}''')
 
 argc = len(sys.argv)
@@ -43,7 +45,7 @@ results = {
 
 for week in season.weeks:
     # For each week
-    week_results = {'num': week.num, 'matches': []}
+    week_results = {'num': week.num, 'matches': [], 'correct': 0, 'played': 0}
     all_matches_played = True
 
     # Load last standing ranking
@@ -75,6 +77,9 @@ for week in season.weeks:
             team_points[match.winner] += 1
             proj_team_points[match.winner] += 1
             match_results['winner'] = match.winner
+            week_results['played'] += 1
+            if match.winner == hteam:
+                week_results['correct'] += 1
         else:
             # Guess that better ranked team wins
             proj_team_points[hteam] += 1
