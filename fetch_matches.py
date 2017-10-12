@@ -32,6 +32,7 @@ def create_match_doc(season, week):
 
     # Fetch match divs
     match_divs = html.find_all('div', class_=MATCH_DIV_CLASS)
+    team_set = set()
     for match_div in match_divs:
         field_no = 0
         loser_no = 0 
@@ -51,10 +52,13 @@ def create_match_doc(season, week):
 
                 field_no += 1
 
-        if loser:
-            results += '%s, %s, %s\n' % (teams[0], teams[1], teams[1-loser_no])
-        else:
-            results += '%s, %s\n' % (teams[0], teams[1])
+        team_tuple = (teams[0], teams[1])
+        if not(team_tuple in team_set):
+            team_set.add(team_tuple)
+            if loser:
+                results += '%s, %s, %s\n' % (teams[0], teams[1], teams[1-loser_no])
+            else:
+                results += '%s, %s\n' % (teams[0], teams[1])
 
     return results
 
@@ -71,6 +75,7 @@ def process_matches(season, week):
     match_file.write(output)
     match_file.close()
     print output
+
 
 if len(sys.argv) == 3:
     season = sys.argv[1]
