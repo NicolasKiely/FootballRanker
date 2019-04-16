@@ -6,7 +6,7 @@ import header.common
 
 argc = len(sys.argv)
 if argc != 2 and argc != 3:
-    print 'Usage:\n\tpython ranker.py [season] [optional previous season]'
+    print('Usage:\n\tpython ranker.py [season] [optional previous season]')
     exit(0)
 
 # Load season(s)

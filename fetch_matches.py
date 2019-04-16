@@ -1,7 +1,7 @@
 """ Downloads matches from NFL site """
 import sys
 import os
-import urllib2
+import urllib.request
 import bs4
 
 # Div class of team scores
@@ -18,7 +18,7 @@ def fetch_page(season, week):
     """ Downloads page """
     url = URL_TEMPLATE % (season, week)
 
-    response = urllib2.urlopen(url)
+    response = urllib.request.urlopen(url)
     return response.read()
 
 
@@ -55,7 +55,9 @@ def create_match_doc(season, week):
         if not(team_tuple in team_set):
             team_set.add(team_tuple)
             if loser:
-                results += '%s, %s, %s\n' % (teams[0], teams[1], teams[1-loser_no])
+                results += '%s, %s, %s\n' % (
+                    teams[0], teams[1], teams[1-loser_no]
+                )
             else:
                 results += '%s, %s\n' % (teams[0], teams[1])
 

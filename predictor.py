@@ -19,7 +19,7 @@ Week: {{ week.num }}
 
 argc = len(sys.argv)
 if argc != 2 and argc != 3:
-    print 'Usage:\n\tpython predictor.py'
+    print('Usage:\n\tpython predictor.py')
     exit(0)
 
 
@@ -114,4 +114,4 @@ for week in season.weeks:
             proj_score += proj_team_points[team]
     results['weeks'].append(week_results)
 
-print report.render(**results)
+print(report.render(**results))
