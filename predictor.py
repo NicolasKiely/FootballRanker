@@ -1,12 +1,11 @@
-''' Makes predictions of teams '''
+""" Makes predictions of teams """
 
 import sys
 import header.context
 import header.common
 from jinja2 import Template
 
-report = Template(
-'''{% for week in weeks %}
+report = Template("""{% for week in weeks %}
 Week: {{ week.num }}
 {%- for match in week.matches %}
 {{ match.hteam }} vs {{ match.lteam }}
@@ -16,7 +15,7 @@ Week: {{ week.num }}
 {% endfor %}
 {% if week.played %}Accuracy: {{ week.correct }} / {{ week.played }}{% endif %}
 
-{% endfor %}''')
+{% endfor %}""")
 
 argc = len(sys.argv)
 if argc != 2 and argc != 3:
@@ -33,11 +32,11 @@ season.load_rankings()
 # Set of teams to pick and teams won
 available_teams = set(ctx.teams.keys())
 owned_teams = set()
-team_points = {t:0 for t in ctx.teams.keys()}
+team_points = {t: 0 for t in ctx.teams.keys()}
 
 # Projected stats
 proj_owned_teams = set()
-proj_team_points = {t:0 for t in ctx.teams.keys()}
+proj_team_points = {t: 0 for t in ctx.teams.keys()}
 
 results = {
     'weeks': []
@@ -69,7 +68,6 @@ for week in season.weeks:
             lteam, hteam = hteam, lteam
             lscore, hscore = hscore, lscore
 
-        #print '\tPredicted Winner: %s' % hteam
         match_results = {'hteam': hteam, 'lteam': lteam}
 
         # Update team points
@@ -85,19 +83,17 @@ for week in season.weeks:
             proj_team_points[hteam] += 1
             all_matches_played = False
             
-
         # Update best team to pick
         if lteam in available_teams:
-            if (best_team == None) or (lscore > best_score):
+            if (best_team is None) or (lscore > best_score):
                 best_team = lteam
                 best_score = lscore
                 best_match = match
         week_results['matches'].append(match_results)
                 
-
     # Evaluate best team pick
     if best_match.played:
-        if best_match.loser==best_team:
+        if best_match.loser == best_team:
             available_teams.remove(best_team)
             owned_teams.add(best_team)
             proj_owned_teams.add(best_team)
@@ -106,7 +102,6 @@ for week in season.weeks:
         # This is a projection
         available_teams.remove(best_team)
         proj_owned_teams.add(best_team)
-        #print
 
     # List team score status
     week_score = 0

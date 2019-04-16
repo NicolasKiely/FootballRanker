@@ -1,5 +1,4 @@
-''' Lists out season's picks for season. Add bb to use formatted code '''
-
+""" Lists out season's picks for season. Add bb to use formatted code """
 import sys
 import header.context
 import header.common
@@ -35,8 +34,7 @@ if argc != 2 and argc != 3:
     print 'Usage:\n\tpython picker.py [season]'
     exit(0)
 
-txt = formatted_messages if argc==3 else plain_messages
-
+txt = formatted_messages if argc == 3 else plain_messages
 
 
 # Load season
@@ -48,11 +46,11 @@ season.load_rankings()
 # Set of teams to pick and teams won
 available_teams = set(ctx.teams.keys())
 owned_teams = set()
-team_points = {t:0 for t in ctx.teams.keys()}
+team_points = {t: 0 for t in ctx.teams.keys()}
 
 # Projected stats
 proj_owned_teams = set()
-proj_team_points = {t:0 for t in ctx.teams.keys()}
+proj_team_points = {t: 0 for t in ctx.teams.keys()}
 
 print txt['begin']
 for week in season.weeks:
@@ -90,19 +88,17 @@ for week in season.weeks:
             proj_team_points[hteam] += 1
             all_matches_played = False
             
-
         # Update best team to pick
         if lteam in available_teams:
-            if (best_team == None) or (lscore > best_score):
+            if (best_team is None) or (lscore > best_score):
                 best_team = lteam
                 best_score = lscore
                 best_match = match
-                
 
     # Evaluate best team pick
     print txt['pick'] % best_team,
     if best_match.played:
-        if best_match.loser==best_team:
+        if best_match.loser == best_team:
             print ' [Pick Aqcuired]'
             available_teams.remove(best_team)
             owned_teams.add(best_team)
@@ -117,23 +113,23 @@ for week in season.weeks:
         print
 
     # List team score status
-    print txt['owned'] +'\n    ',
+    print txt['owned'] + '\n    ',
     week_score = 0
     for team in owned_teams:
         week_score += team_points[team]
         print '%s [%s],' % (team, team_points[team]),
-    print '\n'+ txt['score']  % week_score
+    print '\n' + txt['score'] % week_score
     print
     
     if not all_matches_played:
         print txt['proj_pre'],
-        print txt['proj_owned'] +'\n    ',
+        print txt['proj_owned'] + '\n    ',
         proj_score = 0
         for team in proj_owned_teams:
             proj_score += proj_team_points[team]
             print '%s [%s],' % (team, proj_team_points[team]),
 
-        print '\n'+ txt['proj_score'] % proj_score
+        print '\n' + txt['proj_score'] % proj_score
         print txt['proj_post']
 
 print txt['end']

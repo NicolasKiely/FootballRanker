@@ -1,5 +1,4 @@
-''' Downloads matches from NFL site '''
-
+""" Downloads matches from NFL site """
 import sys
 import os
 import urllib2
@@ -16,7 +15,7 @@ OUTPUT_FILE_TEMPLATE = 'seasons/%s/week_%s.txt'
 
 
 def fetch_page(season, week):
-    ''' Downloads page '''
+    """ Downloads page """
     url = URL_TEMPLATE % (season, week)
 
     response = urllib2.urlopen(url)
@@ -24,7 +23,7 @@ def fetch_page(season, week):
 
 
 def create_match_doc(season, week):
-    ''' Creates match document from downloading page '''
+    """ Creates match document from downloading page """
     results = ''
 
     # Download page
@@ -64,31 +63,27 @@ def create_match_doc(season, week):
 
 
 def process_matches(season, week):
-    ''' Downloads data and saves to file '''
+    """ Downloads data and saves to file """
     # Download data and generate output text
     output = create_match_doc(season, week)
 
-    print 'Processing season %s, #%s' % (season, week)
+    print('Processing season %s, #%s' % (season, week))
     if not os.path.exists('seasons/'+season):
         os.makedirs('seasons/'+season)
     match_file = open(OUTPUT_FILE_TEMPLATE % (season, week), 'w')
     match_file.write(output)
     match_file.close()
-    print output
+    print(output)
 
 
 if len(sys.argv) == 3:
-    season = sys.argv[1]
-    week = sys.argv[2]
-    process_matches(season, week)
+    process_matches(sys.argv[1], sys.argv[2])
 
 elif len(sys.argv) == 2:
     # Iterate over all weeks
-    season = sys.argv[1]
-    for week in range(0, 17):
-        process_matches(season, str(week+1))
+    for i in range(0, 17):
+        process_matches(sys.argv[1], str(i+1))
 
 else:
-    print 'Usage:\n\tpython fetch_matches.py [season] [week]'
+    print('Usage:\n\tpython fetch_matches.py [season] [week]')
     exit(0)
-    

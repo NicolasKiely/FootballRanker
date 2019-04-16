@@ -1,5 +1,4 @@
-''' Calculates and saves ranking of teams for a given season '''
-
+""" Calculates and saves ranking of teams for a given season """
 import sys
 import header.context
 import header.common
@@ -12,6 +11,7 @@ if argc != 2 and argc != 3:
 
 # Load season(s)
 season_name = sys.argv[1]
+prev_season_name = None
 if argc == 2:
     ctx_seasons = [season_name]
 else:
@@ -33,8 +33,6 @@ else:
 
     last_ranking.load()
     initial_scores = last_ranking.score
-
-#initial_scores = {tname: 1.0 for tname, team in ctx.teams.iteritems()}
 
 # Calculate rankings
 season.calculate_rankings(initial_scores)
