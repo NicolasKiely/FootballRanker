@@ -1,11 +1,13 @@
-''' Manager of lists of teams and loaded seasons '''
+""" Manager of lists of teams and loaded seasons """
 from . import team
 from . import season
 
 
 class Context(object):
-    def __init__(self, seasons=[]):
-        ''' Loads team names and optionally seasons '''
+    def __init__(self, seasons=None):
+        """ Loads team names and optionally seasons """
+        if seasons is None:
+            seasons = []
         # Load teams from file
         with open('teams.txt', 'r') as team_file:
             team_list = [team.Team.load_record(x) for x in team_file]
@@ -17,6 +19,6 @@ class Context(object):
     def __str__(self):
         return '\n'.join([
             'Teams:',
-            '\t'+'\n\t'.join( map(str, self.teams.values()) ),
-            '\n\t'.join( map(str, self.seasons.values()) ),
+            '\t'+'\n\t'.join(map(str, self.teams.values())),
+            '\n\t'.join(map(str, self.seasons.values())),
         ])

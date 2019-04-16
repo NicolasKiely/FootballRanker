@@ -1,4 +1,5 @@
-''' Team class '''
+""" Team class """
+
 
 class Team(object):
     def __init__(self, name, home, mascot):
@@ -11,6 +12,6 @@ class Team(object):
 
     @classmethod
     def load_record(cls, record):
-        ''' Creates team from string record '''
+        """ Creates team from string record """
         fields = [x.strip() for x in record.split(',')]
         return Team(*fields)
