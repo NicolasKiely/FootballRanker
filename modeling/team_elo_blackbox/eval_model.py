@@ -23,9 +23,13 @@ def eval_model(season: str=None, to_week: int=None, model_def_file: str=None):
         to_week = 18
 
     ctx = header.context.Context([season])
+    # Load team and season data
     teams = ctx.teams
-    print(teams)
-    #model_factory = factory.ModelFactory(to_week)
+    team_index = list(teams.keys())
+    season = ctx.seasons[season]
+    season_matches = season.model_match_records
+
+    model_factory = factory.ModelFactory(to_week, team_index, season_matches)
 
 
 if __name__ == '__main__':

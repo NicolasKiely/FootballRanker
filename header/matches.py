@@ -32,6 +32,14 @@ class Match(object):
         else:
             return '%s, %s' % (self.teams[0], self.teams[1])
 
+    @property
+    def model_match_record(self):
+        """ Serializes match to tuple """
+        return (
+            self.week.num, self.teams[0], self.teams[1],
+            (1 if self.first_winner else -1) if self.played else 0
+        )
+
 
 class Week(object):
     """ Represents a week in a season """

@@ -45,6 +45,14 @@ class Season(object):
             week.ranking.save()
 
         self.week0.ranking.save()
+
+    @property
+    def model_match_records(self):
+        return [
+            match.model_match_record
+            for week in self.weeks
+            for match in week.matches
+        ]
     
     def __str__(self):
         return 'Season %s\n\t%s' % (
