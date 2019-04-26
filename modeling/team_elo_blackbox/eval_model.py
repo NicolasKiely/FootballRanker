@@ -31,6 +31,10 @@ def eval_model(season: str=None, to_week: int=None, model_def_file: str=None):
 
     model_factory = factory.ModelFactory(to_week, team_index, season_matches)
 
+    if model_def_file is None:
+        # Use default model
+        model_data = model_factory.create_blank_model()
+
 
 if __name__ == '__main__':
     eval_model(*sys.argv[1:])
