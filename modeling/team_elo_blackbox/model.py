@@ -58,6 +58,7 @@ class ModelData(object):
         '_periods_index', '_teams_index', '_matches_index',
         # Parameters
         '_match_param', '_is_victor_param', '_elo_sign_param',
+        '_period_match_param',
         # Variables
         '_elo_initial_vars', '_elo_k_var', '_elo_k_decay_var',
         # Internal/etc
@@ -82,11 +83,13 @@ class ModelData(object):
 
         # Initialize parameters
         self._match_param = {}
+        self._period_match_param = {p: [] for p in self._periods_index}
         self._is_victor_param = {}
         self._elo_sign_param = {}
         for m in self._matches_index:
             self._match_param[(m.p, m.t1)] = m
             self._match_param[(m.p, m.t2)] = m
+            self._period_match_param[m.p].append(m)
             self._is_victor_param[(m.p, m.t1)] = 1 if m.v > 0 else 0
             self._is_victor_param[(m.p, m.t2)] = 1 if m.v < 0 else 0
             self._elo_sign_param[(m.p, m.t1)] = m.v
@@ -128,6 +131,10 @@ class ModelData(object):
     def elo_k_decay_val(self) -> float:
         """ Return k decay transfer coefficient """
         return self._elo_k_decay_var
+
+    def period_matches_index(self, p: PeriodType) -> List[MatchData]:
+        """ Gets list of matches for given period """
+        return self._period_match_param[p]
 
     def match_param(self, p: PeriodType, t: TeamType) -> MatchData:
         """ Get match for given team at given period """
