@@ -2,11 +2,12 @@
 
 Usage: python -m modeling.eval_model [season] [to_week] [model def]
 """
+import csv
 import datetime as dtt
 import sys
 
 import header.context
-from modeling.team_elo_blackbox import factory
+from modeling.team_elo_blackbox import factory, model
 
 
 def eval_model(season: str=None, to_week: int=None, model_def_file: str=None):
@@ -34,6 +35,20 @@ def eval_model(season: str=None, to_week: int=None, model_def_file: str=None):
     if model_def_file is None:
         # Use default model
         model_data = model_factory.create_blank_model()
+
+        csv_writer = csv.writer(sys.stdout)
+        csv_writer.writerow(
+            ['Week', 'Team 1 Name', 'Team 1 ELO', 'Team 2 Name', 'Team 2 ELO']
+        )
+
+        for p in model_data.periods_index:
+            period_matches = model_data.period_matches_index(p)
+            if len(period_matches) == 0:
+                continue
+            for m in period_matches:
+                elo_1 = model.elo(model_data, m, m.t1)
+                elo_2 = model.elo(model_data, m, m.t2)
+                csv_writer.writerow([p, m.t1, elo_1, m.t2, elo_2])
 
 
 if __name__ == '__main__':
