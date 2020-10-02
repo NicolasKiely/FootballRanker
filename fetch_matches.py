@@ -3,12 +3,21 @@ import sys
 import os
 import urllib.request
 import bs4
+import json
 
 # Div class of team scores
-MATCH_DIV_CLASS = 'list-matchup-row-team'
+MATCH_DIV_CLASS = 'nfl-c-matchup-strip__game'
+
+# Class name of match's team names
+MATCH_NAME_CLASS = "nfl-c-matchup-strip__team-fullname"
+
+# Class name of match's scores
+MATCH_SCORE_CLASS = "nfl-c-matchup-strip__team-score"
 
 # URL to fetch data from
-URL_TEMPLATE = 'http://www.nfl.com/schedules/%s/REG%s'
+# URL_TEMPLATE = 'http://www.nfl.com/schedules/%s/REG%s'
+URL_TEMPLATE = 'http://www.nfl.com/api/lazy/load?json=%s'
+
 
 # Output filename for season and week data
 OUTPUT_FILE_TEMPLATE = 'seasons/%s/week_%s.txt'
@@ -16,9 +25,27 @@ OUTPUT_FILE_TEMPLATE = 'seasons/%s/week_%s.txt'
 
 def fetch_page(season, week):
     """ Downloads page """
-    url = URL_TEMPLATE % (season, week)
+    # url = URL_TEMPLATE % (season, week)
+    payload = {
+        "Name": "Schedules",
+        "Module": {
+            "seasonFromUrl": int(season),
+            "SeasonType": "REG%s" % week,
+            "WeekFromUrl": 4,
+            "HeaderCountryCode": "US",
+            "PreSeasonPlacement": 0,
+            "RegularSeasonPlacement": 0,
+            "PostSeasonPlacement": 0,
+            "TimeZoneID": "America/New_York"
+        },
+    }
+    url = URL_TEMPLATE % json.dumps(payload, separators=(",", ":"))
 
     response = urllib.request.urlopen(url)
+    code = response.getcode()
+    if code != 200:
+        sys.stderr.write("HTTP error %s: Failed to load page %s\n" % (code, url))
+        raise IOError
     return response.read()
 
 
@@ -32,24 +59,34 @@ def create_match_doc(season, week):
     # Fetch match divs
     match_divs = html.find_all('div', class_=MATCH_DIV_CLASS)
     team_set = set()
+    if not match_divs:
+        sys.stderr.write("Error, no matches found!\n")
+
     for match_div in match_divs:
-        field_no = 0
-        loser_no = 0 
+        loser_no = 0
         loser = False
         teams = []
-        for field_div in match_div.children:
-            if not(type(field_div) is bs4.element.Tag):
-                continue
+        scores = []
 
-            fclass = field_div['class']
-            if 'team-name' in fclass:
-                teams.append(field_div.contents[0])
+        # Get team names
+        team_name_spans = match_div.find_all("span", class_=MATCH_NAME_CLASS)
+        for team_name_span in team_name_spans:
+            teams.append(team_name_span.string.strip())
 
-                if 'lost' in fclass:
-                    loser = True
-                    loser_no = field_no
+        # Get team scores
+        team_score_divs = match_div.find_all("div", class_=MATCH_SCORE_CLASS)
+        for team_score_div in team_score_divs:
+            scores.append(int(team_score_div.string.strip()))
 
-                field_no += 1
+        if scores:
+            if scores[0] > scores[1]:
+                loser_no = 1
+                loser = True
+            elif scores[0] < scores[1]:
+                loser_no = 0
+                loser = True
+            else:
+                loser = False
 
         team_tuple = (teams[0], teams[1])
         if not(team_tuple in team_set):
