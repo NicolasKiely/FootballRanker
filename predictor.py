@@ -52,11 +52,7 @@ for week in season.weeks:
         standing = season.week0.ranking
     else:
         standing = season.weeks[week.num-1].ranking
-
-    # Best losing team
-    best_team = None
     best_score = 0
-    best_match = None
 
     for match in week.matches:
         # For each match
@@ -82,26 +78,7 @@ for week in season.weeks:
             # Guess that better ranked team wins
             proj_team_points[hteam] += 1
             all_matches_played = False
-            
-        # Update best team to pick
-        if lteam in available_teams:
-            if (best_team is None) or (lscore > best_score):
-                best_team = lteam
-                best_score = lscore
-                best_match = match
         week_results['matches'].append(match_results)
-                
-    # Evaluate best team pick
-    if best_match.played:
-        if best_match.loser == best_team:
-            available_teams.remove(best_team)
-            owned_teams.add(best_team)
-            proj_owned_teams.add(best_team)
-
-    else:
-        # This is a projection
-        available_teams.remove(best_team)
-        proj_owned_teams.add(best_team)
 
     # List team score status
     week_score = 0

@@ -25,7 +25,7 @@ season = ctx.seasons[season_name]
 # Set initial scores
 if argc == 2:
     # Just use 1.0
-    initial_scores = {tname: 1.0 for tname, team in ctx.teams.iteritems()}
+    initial_scores = {tname: 1.0 for tname, team in ctx.teams.items()}
 
 else:
     prev_season = ctx.seasons[prev_season_name]

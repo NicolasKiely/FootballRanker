@@ -12,7 +12,7 @@ class Ranking(object):
 
     def set_scores(self, scores):
         """ Sets scores for ranking """
-        self.score = {k: v for k, v in scores.iteritems()}
+        self.score = {k: v for k, v in scores.items()}
 
     def calculate(self, prev_scores):
         """ Calculate scores for this week using data from past week """

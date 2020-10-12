@@ -27,7 +27,13 @@ class Season(object):
 
         for week in self.weeks:
             # Calculate this week's rankings
-            week.ranking.calculate(scores)
+            try:
+                week.ranking.calculate(scores)
+            except KeyError as ex:
+                print(
+                    "Error, could not compute ranks for week %s" % week.num
+                )
+                raise ex
 
             # Update scores for use in next week
             scores = week.ranking.score
