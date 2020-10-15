@@ -1,6 +1,6 @@
 """ Tracks ranking of teams """
 
-from . import common
+from header import common
 
 
 class Ranking(object):

@@ -1,5 +1,21 @@
 """ Common definitions in scripts """
+from typing import Tuple
+from typing import NewType
 
+# Season ID
+SeasonID = NewType("SeasonName", str)
+
+# Week numerical ID
+WeekID = NewType("WeekID", int)
+
+# Starting week
+PRELIM_WEEK_ID = WeekID(0)
+
+# Name of team
+TeamName = NewType("TeamName", str)
+
+# Match record format
+ModelMatchRecord = Tuple[WeekID, TeamName, TeamName, int]
 
 # Output filename for season and week data
 MATCH_FILE = 'seasons/%s/week_%s.txt'

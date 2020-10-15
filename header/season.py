@@ -7,20 +7,25 @@ Data format:
         [team 1], [team 2], [winning team]
     The if the match has not happened yet, the winning team can be ommitted
 """
+from typing import List
 
-from . import matches
-from . import common
+from header import matches
+from header import common
 
 
 class Season(object):
-    def __init__(self, context, name):
+    def __init__(self, context, name: common.SeasonID):
         """ Loads season by name """
-        self.name = name
+        self.name: common.SeasonID = name
         self.context = context
-        self.week0 = matches.Week(self, 0, load=False)
-        self.weeks = [matches.Week(self, x) for x in common.week_range()]
+        self.week0: matches.Week = matches.Week(
+            self, common.PRELIM_WEEK_ID, load=False
+        )
+        self.weeks: List[matches.Week] = [
+            matches.Week(self, x) for x in common.week_range()
+        ]
 
-    def calculate_rankings(self, initial_score):
+    def calculate_rankings(self, initial_score: float):
         """ Calculate rankings for all weeks """
         scores = initial_score
         self.week0.ranking.set_scores(initial_score)
@@ -53,7 +58,7 @@ class Season(object):
         self.week0.ranking.save()
 
     @property
-    def model_match_records(self):
+    def model_match_records(self) -> List[common.ModelMatchRecord]:
         return [
             match.model_match_record
             for week in self.weeks

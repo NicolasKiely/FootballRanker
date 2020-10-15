@@ -29,4 +29,4 @@ sf , San Francisco, 49ers
 sea, Seattle      , Seahawks
 tb , Tampa Bay    , Buccaneers
 ten, Tennessee    , Titans
-was, Washington   , Redskins
+was, Washington   , Football Team
