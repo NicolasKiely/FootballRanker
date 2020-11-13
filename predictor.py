@@ -51,7 +51,7 @@ for week in season.weeks:
     if week.num == 1:
         standing = season.week0.ranking
     else:
-        standing = season.weeks[week.num-1].ranking
+        standing = season.weeks[week.num-2].ranking
     best_score = 0
 
     for match in week.matches:

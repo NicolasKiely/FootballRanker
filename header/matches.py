@@ -19,7 +19,7 @@ class Match(object):
             played = True
             winner = team_list[2]
             teams = team_list[:2]
-            self.first_winner: bool = (self.winner == team_list[0])
+            self.first_winner: bool = (winner == team_list[0])
             self.loser: common.TeamName = team_list[
                 1 if self.first_winner else 0
             ]

@@ -23,6 +23,12 @@ MATCH_FILE = 'seasons/%s/week_%s.txt'
 # Filename for team rankings at a given week in a season
 RANK_FILE = 'seasons/%s/rank_%s.txt'
 
+# Starting week number
+MIN_WEEK = 1
+
+# Last week number
+MAX_WEEK = 17
+
 
 def parse(record):
     """ Parses text record string, which are comma separated lines """
@@ -31,4 +37,4 @@ def parse(record):
 
 def week_range():
     """ Returns range of weeks """
-    return range(1, 18)
+    return range(MIN_WEEK, MAX_WEEK+1)

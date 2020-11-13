@@ -1,6 +1,7 @@
 """ Computes priors for teams """
 import sys
 import header.context
+from modeling import priors
 
 
 argc = len(sys.argv)
@@ -15,6 +16,8 @@ ctx = header.context.Context(season_names)
 # Calculate priors
 acc_seasons = []
 for season_name in season_names:
-    acc_seasons.append(season_name)
     season = ctx.seasons[season_name]
-    season.calculate_team_priors(acc_seasons)
+    acc_seasons.append(season)
+    wow_priors = priors.TeamWOWPriors(acc_seasons)
+    print(season.name)
+    wow_priors.calculate()
